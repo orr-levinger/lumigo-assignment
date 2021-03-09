@@ -8,8 +8,8 @@ npm run start
 
 End points:
 ```
-GET localhost:{PORT}/v1/statistics
-POST localhost:{PORT}/v1/messages
+GET localhost:{PORT}/statistics
+POST localhost:{PORT}/messages
 ```
 
 Env variables:
