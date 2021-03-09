@@ -42,8 +42,8 @@ export const assignTask = (task: Task) => {
   if (availableWorkers.length > 0) {
     console.log(`has [${availableWorkers.length}] worm workers`);
     child = availableWorkers.pop();
-    console.log(`using worm worker: [${child.pid}] for the task`);
     delete workers.available[child.pid];
+    console.log(`using worm worker: [${child.pid}] for the task`);
     workers.busy[child.pid] = child;
   } else {
     console.log(`no worm for the task, spinning new worker`);

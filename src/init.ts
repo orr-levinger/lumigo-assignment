@@ -13,7 +13,7 @@ export const init = () => {
     fs.openSync(lockPath, 'w')
   }
   process.env.WORKER_TIMEOUT = process.env.WORKER_TIMEOUT || "10000";
-  process.env.TASK_SIMULATED_DURATION = process.env.TASK_SIMULATED_DURATION || "3000";
+  process.env.TASK_SIMULATED_DURATION = process.env.TASK_SIMULATED_DURATION || "5000";
   process.env.PORT = process.env.PORT || "3000";
   process.env.RETRY_DELAY = process.env.RETRY_DELAY || "3000";
   process.env.RETRIES = process.env.RETRIES || "3";
