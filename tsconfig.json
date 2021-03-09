@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "lib": ["es2017"],
+    "rootDir": "./",
+    "module": "CommonJS",
+    "preserveConstEnums": true,
+    "target": "ES2017",
+    "esModuleInterop": true,
+    "inlineSources": true,
+    "sourceRoot": "/",
+    "resolveJsonModule": true,
+    "sourceMap": true
+  },
+  "exclude": ["__tests__"]
+}
