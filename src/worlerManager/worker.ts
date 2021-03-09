@@ -61,7 +61,7 @@ process.on("message", async (message: Task) => {
       };
       process.send!(taskResponse);
     }
-  }, 3000);
+  }, Number(process.env.TASK_SIMULATED_DURATION));
 });
 
 const writeToFile = (message: string) => {
@@ -71,17 +71,11 @@ const writeToFile = (message: string) => {
       throw error;
     }
 
-    // Open existing JSON file
-    const oldTest = fs.readFileSync(filePath, "utf8");
-    // Merge object array with new data
-    const newText = oldTest.concat(message);
+    console.log("writing message to file", message);
 
-    console.log("newText", newText);
-
-    // Save new data to the existing JSON file
-    fs.writeFileSync(
+    fs.appendFileSync(
       filePath,
-      `${newText}\n`,
+      `${message}\n`,
       "utf8"
     );
 
