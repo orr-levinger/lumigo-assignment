@@ -1,8 +1,13 @@
 # lumigo-assignment
 
-Some basic Git commands are:
+Instructions to execute the assigment:
 ```
-git status
-git add
-git commit
+npm install
+npm run start
+```
+
+End points:
+```
+GET localhost:{PORT}/v1/statistics
+POST localhost:{PORT}/v1/messages
 ```
