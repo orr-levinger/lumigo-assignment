@@ -6,7 +6,6 @@
     }, err);
     res.status(statusCode).json({
       message: err.message || err.toString(),
-      more_info: err.toString(),
       status: statusCode,
     });
   } catch (error) {

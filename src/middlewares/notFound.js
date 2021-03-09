@@ -1,6 +1,6 @@
-export default (err, req, res, next) => {
+export default (req, res, next) => {
   console.error({
-   message: `Request to: ${req.originalUrl} - does not exist, return 404`
+    message: `Request to: ${req.originalUrl} - does not exist, return 404`
   });
   res.status(404).send({
     message: 'Not Found',

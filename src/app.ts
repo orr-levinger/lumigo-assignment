@@ -10,10 +10,11 @@ init();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(notFound);
-app.use(errorHandler);
+
 app.post('/messages', MessageController.postMessage);
 app.get('/statistics', StatisticsController.getStatistics);
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(Number(process.env.PORT), (err) => {
   if (err) {
