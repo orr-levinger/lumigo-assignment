@@ -1,7 +1,21 @@
-import * as WorkersManager from '../lib/WorkersManager';
+import {Task} from "../types/Task";
+import {assignTask} from "../worlerManager/WorkersManager";
 
-export const postMessage = async (req, res, next) => {
+const { v4: uuidv4 } = require("uuid");
+
+export const postMessage = (req, res, next) => {
   try {
+    const {body: {message}} = req;
+    console.log(`Server received new message [${message}]`);
+
+    const task: Task = {
+      id: uuidv4(),
+      body: message
+    };
+
+    console.log(`created new task`, task);
+    assignTask(task);
+    res.send("messages was called");
   } catch (err) {
     next(err);
   }
