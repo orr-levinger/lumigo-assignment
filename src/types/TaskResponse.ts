@@ -3,4 +3,5 @@ export type TaskResponse = {
     status: 'DONE' | 'ERROR',
     body: string,
     error?: any,
+    retries: number
 };

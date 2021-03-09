@@ -37,12 +37,17 @@ process.on("message", async (message: Task) => {
   }
   setTimeout(() => {
     try {
+
+      if(message.body === "ERROR"){
+        throw new Error("Worker throw an intentional error");
+      }
       console.log("message from parent:", message);
       writeToFile(message.body);
       const taskResponse: TaskResponse = {
         id: message.id,
         status: "DONE",
         body: message.body,
+        retries: message.retries
       };
       process.send!(taskResponse);
       timeout = workerTimeout();
@@ -52,6 +57,7 @@ process.on("message", async (message: Task) => {
         status: "ERROR",
         error: e,
         body: message.body,
+        retries: message.retries
       };
       process.send!(taskResponse);
     }

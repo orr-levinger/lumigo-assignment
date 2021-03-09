@@ -10,7 +10,8 @@ export const postMessage = (req, res, next) => {
 
     const task: Task = {
       id: uuidv4(),
-      body: message
+      body: message,
+      retries: Number(process.env.RETRY_DELAY),
     };
 
     console.log(`created new task`, task);

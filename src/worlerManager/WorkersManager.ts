@@ -5,7 +5,7 @@ import { ChildProcess } from "child_process";
 const fork = require("child_process").fork;
 const path = require("path");
 
-const workerProcess = path.resolve(__dirname,"worker.js");
+const workerProcess = path.resolve(__dirname, "worker.js");
 
 let invocations = 0;
 
@@ -45,7 +45,7 @@ export const assignTask = (task: Task) => {
     child = fork(workerProcess, [], options);
     child.on("message", (message: TaskResponse) => {
       console.log(message);
-      const { status, id, body, error } = message;
+      const { status, id, body, error, retries } = message;
       switch (status) {
         case "DONE":
           console.log(
@@ -56,11 +56,18 @@ export const assignTask = (task: Task) => {
           break;
         case "ERROR":
           console.error(`Worker [${child.pid}] failed with error`, error);
-          assignTask({
-            body: message.body,
-            id: message.id,
-          });
-          setTimeout(() => {}, Number(process.env.RETRY_DELAY));
+          if (retries > 0) {
+            console.log(`Retrying [${retries}] more times in [${process.env.RETRY_DELAY}] milliseconds`);
+            setTimeout(() => {
+              assignTask({
+                body,
+                id,
+                retries: retries - 1,
+              });
+            }, Number(process.env.RETRY_DELAY));
+          } else{
+            console.warn(`Task failed after [${retries}] attempts... `);
+          }
           break;
         default:
       }
