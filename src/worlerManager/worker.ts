@@ -81,7 +81,7 @@ const writeToFile = (message: string) => {
     // Save new data to the existing JSON file
     fs.writeFileSync(
       filePath,
-      `worker[${process.pid}] : ${newText}\r\n`,
+      `${newText}\n`,
       "utf8"
     );
 
