@@ -20,7 +20,7 @@ const workerTimeout = () => {
   return setTimeout(() => {
     console.log(`[${process.pid}] exit since it was idle for too long...`);
     process.exit();
-  }, 10000);
+  }, Number(process.env.WORKER_TIMEOUT));
 };
 
 const resetTimeout = () => {
