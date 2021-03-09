@@ -8,6 +8,7 @@ const path = require("path");
 const workerProcess = path.resolve(__dirname, "worker.js");
 
 let invocations = 0;
+let failures = 0;
 
 let workers: {
   busy: Record<string, ChildProcess>;
@@ -25,6 +26,7 @@ export const getStatistics = () => {
     total_invocation: invocations,
     busy: busyArray.length,
     worm: wormArray.length,
+    failures,
   };
 };
 
@@ -72,6 +74,7 @@ export const assignTask = (task: Task) => {
               });
             }, Number(process.env.RETRY_DELAY));
           } else {
+            failures++;
             console.warn(`Task failed after [${retries}] attempts... `);
           }
           break;

@@ -38,6 +38,7 @@ process.on("message", async (message: Task) => {
   setTimeout(() => {
     try {
 
+      // Just to simulate an ERROR
       if(message.body === "ERROR"){
         throw new Error("Worker throw an intentional error");
       }
