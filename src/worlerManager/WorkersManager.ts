@@ -18,11 +18,13 @@ let workers: {
 };
 
 export const getStatistics = () => {
+  let busyArray = Object.values(workers.busy);
+  let wormArray = Object.values(workers.available);
   return {
-    active_instances:
-      Object.values(workers.busy).length +
-      Object.values(workers.available).length,
+    active_instances: busyArray.length + wormArray.length,
     total_invocation: invocations,
+    busy: busyArray.length,
+    worm: wormArray.length,
   };
 };
 
@@ -34,6 +36,7 @@ export const assignTask = (task: Task) => {
   };
   invocations++;
   let availableWorkers = Object.values(workers.available);
+
   if (availableWorkers.length > 0) {
     console.log(`has [${availableWorkers.length}] worm workers`);
     child = availableWorkers.pop();
@@ -44,20 +47,23 @@ export const assignTask = (task: Task) => {
     console.log(`no worm for the task, spinning new worker`);
     child = fork(workerProcess, [], options);
     child.on("message", (message: TaskResponse) => {
-      console.log(message);
       const { status, id, body, error, retries } = message;
       switch (status) {
         case "DONE":
           console.log(
             `Worker[${child.pid}] finished Task[${id}] adding it to available pool`
           );
-          delete workers.available[child.pid];
+          delete workers.busy[child.pid];
           workers.available[child.pid] = child;
           break;
         case "ERROR":
+          delete workers.busy[child.pid];
+          workers.available[child.pid] = child;
           console.error(`Worker [${child.pid}] failed with error`, error);
           if (retries > 0) {
-            console.log(`Retrying [${retries}] more times in [${process.env.RETRY_DELAY}] milliseconds`);
+            console.log(
+              `Retrying [${retries}] more times in [${process.env.RETRY_DELAY}] milliseconds`
+            );
             setTimeout(() => {
               assignTask({
                 body,
@@ -65,11 +71,12 @@ export const assignTask = (task: Task) => {
                 retries: retries - 1,
               });
             }, Number(process.env.RETRY_DELAY));
-          } else{
+          } else {
             console.warn(`Task failed after [${retries}] attempts... `);
           }
           break;
         default:
+          console.log(message);
       }
     });
   }

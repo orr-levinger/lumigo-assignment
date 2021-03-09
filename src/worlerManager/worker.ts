@@ -55,7 +55,7 @@ process.on("message", async (message: Task) => {
       const taskResponse: TaskResponse = {
         id: message.id,
         status: "ERROR",
-        error: e,
+        error: e.message  || `Unknown error from worker [${process.pid}]`,
         body: message.body,
         retries: message.retries
       };
