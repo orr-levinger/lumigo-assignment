@@ -26,7 +26,7 @@ export const postMessage = (req, res, next) => {
 
     console.log(`created new task`, task);
     assignTask(task);
-    res.status(200).send("messages was called");
+    res.status(201).send("messages was called");
   } catch (err) {
     next(err);
   }
