@@ -21,12 +21,12 @@ export const postMessage = (req, res, next) => {
     const task: Task = {
       id: uuidv4(),
       body: message,
-      retries: Number(process.env.RETRIES),
+      retries: Number(process.env.TASK_MAX_RETRIES),
     };
 
     console.log(`created new task`, task);
     assignTask(task);
-    res.status(201).send("messages was called");
+    res.status(201).json({ taskId: task.id });
   } catch (err) {
     next(err);
   }

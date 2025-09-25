@@ -10,7 +10,7 @@ const lockPath = path.resolve(__dirname,'../', "result.txt.lock");
 const lockOptions = {
   wait: 1000,
   stale: 5000,
-  retries: 100,
+  retries: 3,
   retryWait: 1000,
 };
 
@@ -42,8 +42,14 @@ process.on("message", async (message: Task) => {
       if(message.body === "ERROR"){
         throw new Error("Worker throw an intentional error");
       }
+
+      // Simulate random failures based on TASK_SIMULATED_ERROR_PERCENTAGE environment variable
+      const errorPercentage = parseFloat(process.env.TASK_SIMULATED_ERROR_PERCENTAGE || "0") / 100;
+      if (errorPercentage > 0 && Math.random() < errorPercentage) {
+        throw new Error(`Worker [${process.pid}] simulated failure (ERROR_PERCENTAGE: ${errorPercentage * 100}%)`);
+      }
       console.log("message from parent:", message);
-      writeToFile(message.body);
+      writeToFile(message.id, message.body);
       const taskResponse: TaskResponse = {
         id: message.id,
         status: "DONE",
@@ -65,18 +71,22 @@ process.on("message", async (message: Task) => {
   }, Number(process.env.TASK_SIMULATED_DURATION));
 });
 
-const writeToFile = (message: string) => {
+const writeToFile = (taskId: string, message: string) => {
   lockFile.lock(lockPath, lockOptions, (error) => {
     if (error) {
       console.error(error);
       throw error;
     }
 
-    console.log("writing message to file", message);
+    const timestamp = new Date().toISOString();
+    const workerId = process.pid;
+    const logEntry = `${timestamp} | Worker: ${workerId} | Task: ${taskId} | Message: ${message}`;
+    
+    console.log("writing log entry to file", logEntry);
 
     fs.appendFileSync(
       filePath,
-      `${message}\n`,
+      `${logEntry}\n`,
       "utf8"
     );
 

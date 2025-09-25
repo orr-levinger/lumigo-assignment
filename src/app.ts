@@ -11,15 +11,15 @@ init();
 const app = express();
 app.use(bodyParser.json());
 
-app.post('/messages', MessageController.postMessage);
+app.post('/tasks', MessageController.postMessage);
 app.get('/statistics', StatisticsController.getStatistics);
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(Number(process.env.PORT), (err) => {
+app.listen(Number(process.env.SERVER_PORT), (err) => {
   if (err) {
     return console.error(err);
   }
-  console.log(`server is listening on ${Number(process.env.PORT)}`);
+  console.log(`server is listening on ${Number(process.env.SERVER_PORT)}`);
 });
 

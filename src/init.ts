@@ -12,10 +12,11 @@ export const init = () => {
   if(!lockPathExists){
     fs.openSync(lockPath, 'w')
   }
-  process.env.WORKER_TIMEOUT = process.env.WORKER_TIMEOUT || "10000";
-  process.env.TASK_SIMULATED_DURATION = process.env.TASK_SIMULATED_DURATION || "5000";
-  process.env.PORT = process.env.PORT || "3000";
-  process.env.RETRY_DELAY = process.env.RETRY_DELAY || "3000";
-  process.env.RETRIES = process.env.RETRIES || "3";
+  process.env.WORKER_TIMEOUT = process.env.WORKER_TIMEOUT || "60000";
+  process.env.TASK_SIMULATED_DURATION = process.env.TASK_SIMULATED_DURATION || "15000";
+  process.env.SERVER_PORT = process.env.SERVER_PORT || "3000";
+  process.env.TASK_ERROR_RETRY_DELAY = process.env.TASK_ERROR_RETRY_DELAY || "3000";
+  process.env.TASK_MAX_RETRIES = process.env.TASK_MAX_RETRIES || "3";
+  process.env.TASK_SIMULATED_ERROR_PERCENTAGE = process.env.TASK_SIMULATED_ERROR_PERCENTAGE || "0.25";
 };
 
